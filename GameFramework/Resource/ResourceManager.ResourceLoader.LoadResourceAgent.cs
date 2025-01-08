@@ -100,6 +100,7 @@ namespace GameFramework.Resource
                     m_Helper.LoadResourceAgentHelperUpdate += OnLoadResourceAgentHelperUpdate;
                     m_Helper.LoadResourceAgentHelperReadFileComplete += OnLoadResourceAgentHelperReadFileComplete;
                     m_Helper.LoadResourceAgentHelperReadBytesComplete += OnLoadResourceAgentHelperReadBytesComplete;
+                    m_Helper.LoadResourceAgentHelperReadAssetBundleComplete += OnLoadResourceAgentHelperReadAssetBundleComplete;
                     m_Helper.LoadResourceAgentHelperParseBytesComplete += OnLoadResourceAgentHelperParseBytesComplete;
                     m_Helper.LoadResourceAgentHelperLoadComplete += OnLoadResourceAgentHelperLoadComplete;
                     m_Helper.LoadResourceAgentHelperError += OnLoadResourceAgentHelperError;
@@ -123,6 +124,7 @@ namespace GameFramework.Resource
                     m_Helper.LoadResourceAgentHelperUpdate -= OnLoadResourceAgentHelperUpdate;
                     m_Helper.LoadResourceAgentHelperReadFileComplete -= OnLoadResourceAgentHelperReadFileComplete;
                     m_Helper.LoadResourceAgentHelperReadBytesComplete -= OnLoadResourceAgentHelperReadBytesComplete;
+                    m_Helper.LoadResourceAgentHelperReadAssetBundleComplete -= OnLoadResourceAgentHelperReadAssetBundleComplete;
                     m_Helper.LoadResourceAgentHelperParseBytesComplete -= OnLoadResourceAgentHelperParseBytesComplete;
                     m_Helper.LoadResourceAgentHelperLoadComplete -= OnLoadResourceAgentHelperLoadComplete;
                     m_Helper.LoadResourceAgentHelperError -= OnLoadResourceAgentHelperError;
@@ -235,6 +237,10 @@ namespace GameFramework.Resource
                     {
                         AddWebResourceObject();
                     }
+                    else if (resourceInfo.LoadType == LoadType.LoadFromWebAssetBundle)
+                    {
+                        m_Helper.ReadWebAssetBundle(fullPath, (uint)resourceInfo.HashCode);
+                    }
                     else
                     {
                         throw new GameFrameworkException(Utility.Text.Format("Resource load type '{0}' is not supported.", resourceInfo.LoadType));
@@ -313,6 +319,14 @@ namespace GameFramework.Resource
                     }
 
                     m_Helper.ParseBytes(bytes);
+                }
+
+                private void OnLoadResourceAgentHelperReadAssetBundleComplete(object sender, LoadResourceAgentHelperReadAssetBundleCompleteEventArgs e)
+                {
+                    ResourceObject resourceObject = ResourceObject.Create(m_Task.ResourceInfo.ResourceName.Name, e.AssetBundle, m_ResourceHelper, m_ResourceLoader);
+                    m_ResourceLoader.m_ResourcePool.Register(resourceObject, true);
+                    _ = s_LoadingResourceNames.Remove(m_Task.ResourceInfo.ResourceName.Name);
+                    OnResourceObjectReady(resourceObject);
                 }
 
                 private void OnLoadResourceAgentHelperParseBytesComplete(object sender, LoadResourceAgentHelperParseBytesCompleteEventArgs e)

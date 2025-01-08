@@ -1,7 +1,9 @@
 {
     "name": "GameFramework",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:23db1a6e41a7f494c92e03dfb71cfbe3"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,

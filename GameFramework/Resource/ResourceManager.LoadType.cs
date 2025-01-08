@@ -53,6 +53,11 @@ namespace GameFramework.Resource
             /// 使用网络资源加载。
             /// </summary>
             LoadFromWebFile,
+
+            /// <summary>
+            /// 使用网络资源加载AssetBundle。
+            /// </summary>
+            LoadFromWebAssetBundle,
         }
     }
 }

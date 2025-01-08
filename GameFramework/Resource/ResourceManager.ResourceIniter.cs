@@ -61,7 +61,12 @@ namespace GameFramework.Resource
                     throw new GameFrameworkException("Read-only path is invalid.");
                 }
 
-                m_ResourceManager.m_ResourceHelper.LoadBytes(Utility.Path.GetRemotePath(Path.Combine(m_ResourceManager.m_ReadOnlyPath, RemoteVersionListFileName)), new LoadBytesCallbacks(OnLoadPackageVersionListSuccess, OnLoadPackageVersionListFailure), null);
+                string fileName = RemoteVersionListFileName;
+#if UNITY_WEBGL
+                //在webgl下，每次请求都要加时间戳，否则会缓存
+                fileName += "?v=" + VersionPolicyMgr.Inst.UsingVersion;
+#endif
+                m_ResourceManager.m_ResourceHelper.LoadBytes(Utility.Path.GetRemotePath(Path.Combine(m_ResourceManager.m_ReadOnlyPath, fileName)), new LoadBytesCallbacks(OnLoadPackageVersionListSuccess, OnLoadPackageVersionListFailure), null);
             }
 
             private void OnLoadPackageVersionListSuccess(string fileUri, byte[] bytes, float duration, object userData)
