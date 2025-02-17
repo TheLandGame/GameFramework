@@ -67,7 +67,7 @@ namespace GameFramework.Resource
         /// 通过加载资源代理辅助器开始异步读取资源二进制流。
         /// </summary>
         /// <param name="fullPath">要加载资源的完整路径名。</param>
-        void ReadBytes(string fullPath);
+        void ReadBytes(string fullPath, int hashCode);
 
         /// <summary>
         /// 通过加载资源代理辅助器开始异步读取网络的AssetBundle资源。

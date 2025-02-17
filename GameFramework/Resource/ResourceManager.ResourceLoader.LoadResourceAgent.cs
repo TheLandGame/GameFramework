@@ -230,7 +230,7 @@ namespace GameFramework.Resource
                         }
                         else
                         {
-                            m_Helper.ReadBytes(fullPath);
+                            m_Helper.ReadBytes(fullPath, resourceInfo.HashCode);
                         }
                     }
                     else if (resourceInfo.LoadType == LoadType.LoadFromWebFile)
